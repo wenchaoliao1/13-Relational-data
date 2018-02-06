@@ -1,0 +1,54 @@
+```{r}
+library(tidyverse)
+library(nycflights13)
+
+airlines
+```
+```{r}
+airports
+```
+```{r}
+planes
+```
+```{r}
+weather
+```
+it’s good practice to verify that they do indeed uniquely identify each observation
+```{r}
+planes %>% 
+  count(tailnum) %>% 
+  filter(n > 1)
+```
+```{r}
+weather %>% 
+  count(year, month, day, hour, origin) %>% 
+  filter(n > 1)
+```
+```{r}
+flights %>% 
+  count(year, month, day, flight) %>% 
+  filter(n > 1)
+```
+```{r}
+flights %>% 
+  count(year, month, day, tailnum) %>% 
+  filter(n > 1)
+```
+```{r}
+flights2 <- flights %>% 
+  select(year:day, hour, origin, dest, tailnum, carrier)
+flights2
+```
+```{r}
+flights2 %>%
+  select(-origin, -dest) %>% 
+  left_join(airlines, by = "carrier")
+```
+```{r}
+flights2 %>%
+  select(-origin, -dest) %>% 
+  mutate(name = airlines$name[match(carrier, airlines$carrier)])
+```
+
+
+
